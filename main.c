@@ -33,7 +33,7 @@ void xyz_calc(struct datapoint *dp);
 void euclidean_dist(struct datapoint *dp1, struct datapoint *dp2);
 
 void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2);
-
+//Hallo matviy
 /*****************************************************MAIN***********************************************************/
 int main() {
     // gets time at start
