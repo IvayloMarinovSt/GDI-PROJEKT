@@ -1,7 +1,7 @@
 //
 // Created by ivaylo on 22.12.19.
 //
-#include <values.h>
+#include <limits.h>
 void Merge(int* unsortedField, int begin, int middle, int end){
     int lenghtLeft= middle - begin + 1;
     int lenghtRight= end - middle;
