@@ -7,7 +7,7 @@
 #define POINTS 1000
 #define RADIUS 6371
 #define PI 3.14159265
-double degToRad = 0.017453293;
+#define DEGTORAD 0.01745329
 struct datapoint {
     char event[30]; // event information
     char datetime[30]; // date and time information
@@ -136,8 +136,8 @@ int main() {
 
 void xyz_calc(struct datapoint *dp) {
     double betaRad, alfaRad;
-    betaRad = (90 - dp->longitude) * degToRad;
-    alfaRad = dp->latitude * degToRad;
+    betaRad = (90 - dp->longitude) * DEGTORAD;
+    alfaRad = dp->latitude * DEGTORAD;
     dp->x = RADIUS * sin(betaRad) * cos(alfaRad);
     dp->y = RADIUS * sin(betaRad) * sin(alfaRad);
     dp->z = RADIUS * cos(betaRad);
@@ -159,7 +159,7 @@ void euclidean_dist(struct datapoint *dp1, struct datapoint *dp2) {
 
 
 void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2) {
-    dp2->abstand = RADIUS * acos(sin(dp1->latitude * degToRad) * sin(dp2->latitude * degToRad) +
-                                 cos(dp1->latitude * degToRad) * cos(dp2->latitude * degToRad) *
-                                 cos((dp1->longitude - dp2->longitude) * degToRad));
+    dp2->abstand = RADIUS * acos(sin(dp1->latitude * DEGTORAD) * sin(dp2->latitude * DEGTORAD) +
+                                 cos(dp1->latitude * DEGTORAD) * cos(dp2->latitude * DEGTORAD) *
+                                 cos((dp1->longitude - dp2->longitude) * DEGTORAD));
 }
