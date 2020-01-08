@@ -33,7 +33,7 @@ void xyz_calc(struct datapoint *dp);
 void euclidean_dist(struct datapoint *dp1, struct datapoint *dp2);
 
 void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2);
-//Hallo matviy
+
 /*****************************************************MAIN***********************************************************/
 int main() {
     // gets time at start
@@ -48,7 +48,26 @@ int main() {
     ausgabe(ArrayToSort, array_size);
     free(ArrayToSort);
 
-    char fileNameString[] = "/home/ivaylo/Desktop/GDI-PROJEKT/DataToRead.tab";
+    printf("Please choose user\n1 - ivaylo\n2 - simeon\n3 - matviy\n");
+    char choice;
+    char *fileNameString;
+    char *writeFile;
+    scanf("%c", &choice);
+    switch (choice){
+      case '1': // ivaylo
+          fileNameString = "/home/ivaylo/Desktop/GDI-PROJEKT/DataToRead.tab";
+          writeFile = "/home/ivaylo/Desktop/GDI-PROJEKT/WriteData.txt";
+          break;
+      case '2': // simeon
+          fileNameString = "/home/simeon/Desktop/GDI-PROJEKT/DataToRead.tab";
+          writeFile = "/home/simeon/Desktop/GDI-PROJEKT/WriteData.txt";
+          break;
+      case '3': // matviy
+          fileNameString = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\DataToRead.tab";
+          writeFile = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\WriteData.txt";
+          break;
+    }
+
     FILE *fileToRead;
     // open source file
 
@@ -60,7 +79,7 @@ int main() {
     }
 
     // open destination file
-    char writeFile[] = "/home/ivaylo/Desktop/GDI-PROJEKT/WriteData.txt";
+
     FILE *fileToWrite;
     fileToWrite = fopen(writeFile, "w");
 
