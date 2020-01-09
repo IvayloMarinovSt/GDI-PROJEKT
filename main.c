@@ -44,19 +44,23 @@ int main() {
     char *fileNameString;
     char *writeFile;
     scanf("%c", &choice);
-    switch (choice) {
-        case '1': // ivaylo
-            fileNameString = "/home/ivaylo/Desktop/gdiprojekt/GDI-PROJEKT/DataToRead.tab";
-            writeFile = "/home/ivaylo/Desktop/gdiprojekt/GDI-PROJEKT/WriteData.txt";
-            break;
-        case '2': // simeon
-            fileNameString = "/home/simeon/Desktop/GDI-PROJEKT/DataToRead.tab";
-            writeFile = "/home/simeon/Desktop/GDI-PROJEKT/WriteData.txt";
-            break;
-        case '3': // matviy
-            fileNameString = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\DataToRead.tab";
-            writeFile = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\WriteData.txt";
-            break;
+    switch (choice){
+      case '1': // ivaylo
+          fileNameString = "/home/ivaylo/Desktop/GDI-PROJEKT/DataToRead.tab";
+          writeFile = "/home/ivaylo/Desktop/GDI-PROJEKT/WriteData.txt";
+          break;
+      case '2': // simeon
+          fileNameString = "/home/simeon/Desktop/GDI-PROJEKT/DataToRead.tab";
+          writeFile = "/home/simeon/Desktop/GDI-PROJEKT/WriteData.txt";
+          break;
+      case '3': // matviy
+          fileNameString = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\DataToRead.tab";
+          writeFile = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\WriteData.txt";
+          break;
+      case '4': // Marvin
+          fileNameString = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\DataToRead.tab";
+          writeFile = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\WriteData.txt";
+          break;
     }
 
     FILE *fileToRead = fopen(fileNameString, "r");
