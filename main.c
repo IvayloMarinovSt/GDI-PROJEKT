@@ -1,32 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <tgmath.h>
+#include <math.h>
 #include "merge_sort.h"
 
 #define POINTS 1000
 #define RADIUS 6371
 #define PI 3.14159265
-double degToRad = 0.017453293;
-struct datapoint {
-    char event[30]; // event information
-    char datetime[30]; // date and time information
-    double latitude; // latitude information (Breitengrad)
-    double longitude; // longtitude information (Laengengrad)
-    double x;
-    double y;
-    double z;
-    int altitude; // Geopotential height above sea level integrated from pressure, temperature and humidity
-    int hhh; // Geopotential height above sea level derived from GPS receiver mounted on radiosonde
-    int hgeom1; //
-    int hgeom2; //
-    double PPPP; // air pressure (measured in hPa, hectoPascal)
-    double TTT; // air temperatute measured in Celsius
-    double RH; // relative Humidity
-    int dd; // wind direction in degrees
-    double ff; // wind speed
-    double abstand;
-};
+#define DEGTORAD 0.01745329
+
+// struct datapoint {
+//     char event[30]; // event information
+//     char datetime[30]; // date and time information
+//     double latitude; // latitude information (Breitengrad)
+//     double longitude; // longtitude information (Laengengrad)
+//     double x;
+//     double y;
+//     double z;
+//     int altitude; // Geopotential height above sea level integrated from pressure, temperature and humidity
+//     int hhh; // Geopotential height above sea level derived from GPS receiver mounted on radiosonde
+//     int hgeom1; //
+//     int hgeom2; //
+//     double PPPP; // air pressure (measured in hPa, hectoPascal)
+//     double TTT; // air temperatute measured in Celsius
+//     double RH; // relative Humidity
+//     int dd; // wind direction in degrees
+//     double ff; // wind speed
+//     double abstand;
+// };
 
 void xyz_calc(struct datapoint *dp);
 
@@ -38,33 +39,42 @@ void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2);
 int main() {
     // gets time at start
     clock_t begin = clock();
+    printf("Please choose user\n1 - ivaylo\n2 - simeon\n3 - matviy\n");
+    char choice;
+    char *fileNameString;
+    char *writeFile;
+    scanf("%c", &choice);
+    switch (choice){
+      case '1': // ivaylo
+          fileNameString = "/home/ivaylo/Desktop/GDI-PROJEKT/DataToRead.tab";
+          writeFile = "/home/ivaylo/Desktop/GDI-PROJEKT/WriteData.txt";
+          break;
+      case '2': // simeon
+          fileNameString = "/home/simeon/Desktop/GDI-PROJEKT/DataToRead.tab";
+          writeFile = "/home/simeon/Desktop/GDI-PROJEKT/WriteData.txt";
+          break;
+      case '3': // matviy
+          fileNameString = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\DataToRead.tab";
+          writeFile = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\WriteData.txt";
+          break;
+      case '4': // Marvin
+          fileNameString = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\DataToRead.tab";
+          writeFile = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\WriteData.txt";
+          break;
+    }
 
-    int array_size = 12;
-    int *ArrayToSort = (int *) malloc(array_size * sizeof(int));
-    //int ArrayToSort[12]={3,2,1,8,9,7,0,4,10,6,5,11};
-    init_f(ArrayToSort, array_size);
-    ausgabe(ArrayToSort, array_size);
-    Merge_sort(ArrayToSort, 0, array_size - 1); // es werden die Elemente 0 bis (array_size-1) sortiert
-    ausgabe(ArrayToSort, array_size);
-    free(ArrayToSort);
-
-    char fileNameString[] = "/home/ivaylo/Desktop/GDI-PROJEKT/DataToRead.tab";
-    FILE *fileToRead;
+    FILE *fileToRead = fopen(fileNameString, "r");
     // open source file
-
-    fileToRead = fopen(fileNameString, "r");
     // if fileToRead doesn't exist print error close it and exit the program
     if (fileToRead == NULL) {
         printf("no such file found");
         return 0;
     }
-
     // open destination file
-    char writeFile[] = "/home/ivaylo/Desktop/GDI-PROJEKT/WriteData.txt";
     FILE *fileToWrite;
     fileToWrite = fopen(writeFile, "w");
 
-    struct datapoint dp[POINTS];
+    struct datapoint *dp = (struct datapoint *) malloc (POINTS * sizeof(struct datapoint));
 
     int fail = 0;
     int success;
@@ -72,6 +82,7 @@ int main() {
     int i = 0;
     // reads the chosen amount of data points and deletes any points with missing values
     for (i = 0; i < POINTS; i++) {
+        // while(!feof(fileToRead)) {
         success = fscanf(fileToRead, "%s\t%s\t%lf\t%lf\t%d\t%d\t%d\t%d\t%lf\t%lf\t%lf\t%d\t%lf\n", dp[i].event,
                          dp[i].datetime, &dp[i].latitude, &dp[i].longitude, &dp[i].altitude, &dp[i].hhh,
                          &dp[i].hgeom1,
@@ -82,26 +93,43 @@ int main() {
             prev = fail;
             fail = 0;
         }
+        // ++i;
     }
+    // printf("TEST\n");
+    // dp[0]=dp[2];
+    // printf("dp:%d\t%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n", i,
+    //         dp[0].event,
+    //         dp[0].datetime, dp[0].latitude, dp[0].longitude,
+    //         dp[0].altitude, dp[0].hhh, dp[0].hgeom1, dp[0].hgeom2, dp[0].PPPP, dp[0].TTT, dp[0].RH, dp[0].dd,
+    //         dp[0].ff);
+    // printf("dp:%d\t%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n", i,
+    //         dp[2].event,
+    //         dp[2].datetime, dp[2].latitude, dp[2].longitude,
+    //         dp[2].altitude, dp[2].hhh, dp[2].hgeom1, dp[2].hgeom2, dp[2].PPPP, dp[2].TTT, dp[2].RH, dp[2].dd,
+    //         dp[2].ff);
+    Merge_sort(dp, 2, 100, '2');
+    printf("MERGE HAS ENDED\n");
     // puts all of the read data in a new file with the number of the point in front of the values
-    for (i = 0; i < POINTS; i++) {
-        fprintf(fileToWrite, "dp:%d\t%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n", i,
-                dp[i].event,
-                dp[i].datetime, dp[i].latitude, dp[i].longitude,
-                dp[i].altitude, dp[i].hhh, dp[i].hgeom1, dp[i].hgeom2, dp[i].PPPP, dp[i].TTT, dp[i].RH, dp[i].dd,
-                dp[i].ff);
+    for (int l = 0; l < i; l++) {
+        fprintf(fileToWrite, "dp:%d\t%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n", l,
+                dp[l].event,
+                dp[l].datetime, dp[l].latitude, dp[l].longitude,
+                dp[l].altitude, dp[l].hhh, dp[l].hgeom1, dp[l].hgeom2, dp[l].PPPP, dp[l].TTT, dp[l].RH, dp[l].dd,
+                dp[l].ff);
     }
-    xyz_calc(&dp[0]);
-    printf("x: %lf\ny: %lf\nz: %lf\nLongitude: %lf\nLatitude: %lf\n", dp[0].x, dp[0].y, dp[0].z, dp[0].longitude,
-           dp[0].latitude);
-    printf("Longitude: %lf\nLatitude: %lf\n", dp[999].longitude, dp[999].latitude);
-    euclidean_dist(&dp[0], &dp[999]);
-    orthodromic_dist(&dp[0], &dp[999]);
-    printf("Euclidean distance= %.2lf km\n", dp[0].abstand);
-    printf("Orthodromic distance= %.2lf km\n", dp[999].abstand);
-    fclose(fileToRead);
-    fclose(fileToWrite);
 
+    // xyz_calc(&dp[0]);
+    // printf("x: %lf\ny: %lf\nz: %lf\nLongitude: %lf\nLatitude: %lf\n", dp[0].x, dp[0].y, dp[0].z, dp[0].longitude,
+    //        dp[0].latitude);
+    // printf("Longitude: %lf\nLatitude: %lf\n", dp[999].longitude, dp[999].latitude);
+    // euclidean_dist(&dp[0], &dp[999]);
+    // orthodromic_dist(&dp[0], &dp[999]);
+    // printf("Euclidean distance= %.2lf km\n", dp[0].abstand);
+    // printf("Orthodromic distance= %.2lf km\n", dp[999].abstand);
+
+    //fclose(fileToRead);
+    //fclose(fileToWrite);
+    //free(dp);
 
     clock_t end = clock();
     double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
@@ -117,8 +145,8 @@ int main() {
 
 void xyz_calc(struct datapoint *dp) {
     double betaRad, alfaRad;
-    betaRad = (90 - dp->longitude) * degToRad;
-    alfaRad = dp->latitude * degToRad;
+    betaRad = (90 - dp->longitude) * DEGTORAD;
+    alfaRad = dp->latitude * DEGTORAD;
     dp->x = RADIUS * sin(betaRad) * cos(alfaRad);
     dp->y = RADIUS * sin(betaRad) * sin(alfaRad);
     dp->z = RADIUS * cos(betaRad);
@@ -140,7 +168,7 @@ void euclidean_dist(struct datapoint *dp1, struct datapoint *dp2) {
 
 
 void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2) {
-    dp2->abstand = RADIUS * acos(sin(dp1->latitude * degToRad) * sin(dp2->latitude * degToRad) +
-                                 cos(dp1->latitude * degToRad) * cos(dp2->latitude * degToRad) *
-                                 cos((dp1->longitude - dp2->longitude) * degToRad));
+    dp2->abstand = RADIUS * acos(sin(dp1->latitude * DEGTORAD) * sin(dp2->latitude * DEGTORAD) +
+                                 cos(dp1->latitude * DEGTORAD) * cos(dp2->latitude * DEGTORAD) *
+                                 cos((dp1->longitude - dp2->longitude) * DEGTORAD));
 }
