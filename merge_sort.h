@@ -4,31 +4,12 @@
 #include <limits.h>
 #include <stdlib.h>
 
-struct datapoint {
-    char event[30]; // event information
-    char datetime[30]; // date and time information
-    double latitude; // latitude information (Breitengrad)
-    double longitude; // longtitude information (Laengengrad)
-    double x;
-    double y;
-    double z;
-    int altitude; // Geopotential height above sea level integrated from pressure, temperature and humidity
-    int hhh; // Geopotential height above sea level derived from GPS receiver mounted on radiosonde
-    int hgeom1; //
-    int hgeom2; //
-    double PPPP; // air pressure (measured in hPa, hectoPascal)
-    double TTT; // air temperatute measured in Celsius
-    double RH; // relative Humidity
-    int dd; // wind direction in degrees
-    double ff; // wind speed
-    double abstand;
-};
 
 void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char choice) {
     int lenghtLeft = middle - begin + 1;
     int lenghtRight = end - middle;
-    struct datapoint *leftField = (struct datapoint *) malloc((lenghtLeft + 1) * sizeof(struct datapoint));
-    struct datapoint *rightField = (struct datapoint *) malloc ((lenghtRight + 1) * sizeof(struct datapoint));
+    struct datapoint *leftField = (struct datapoint *) malloc((lenghtLeft + 2) * sizeof(struct datapoint));
+    struct datapoint *rightField = (struct datapoint *) malloc ((lenghtRight + 2) * sizeof(struct datapoint));
 
     for (int i = 1; i <= lenghtLeft + 1; i++) {
         leftField[i] = unsortedField[begin + i - 1];
@@ -105,8 +86,8 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
                     j++;
                 }
             }
-            //free(leftField);
-            //free(rightField);
+            free(leftField);
+            free(rightField);
             break;
     }
 }
