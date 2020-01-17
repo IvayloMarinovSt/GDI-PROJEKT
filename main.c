@@ -9,25 +9,25 @@
 #define PI 3.14159265
 #define DEGTORAD 0.01745329
 
- struct datapoint {
-     char event[30]; // event information
-     char datetime[30]; // date and time information
-     double latitude; // latitude information (Breitengrad)
-     double longitude; // longtitude information (Laengengrad)
-     double x;
-     double y;
-     double z;
-     int altitude; // Geopotential height above sea level integrated from pressure, temperature and humidity
-     int hhh; // Geopotential height above sea level derived from GPS receiver mounted on radiosonde
-     int hgeom1; //
-     int hgeom2; //
-     double PPPP; // air pressure (measured in hPa, hectoPascal)
-     double TTT; // air temperatute measured in Celsius
-     double RH; // relative Humidity
-     int dd; // wind direction in degrees
-     double ff; // wind speed
-     double abstand;
- };
+struct datapoint {
+    char event[30]; // event information
+    char datetime[30]; // date and time information
+    double latitude; // latitude information (Breitengrad)
+    double longitude; // longtitude information (Laengengrad)
+    double x;
+    double y;
+    double z;
+    int altitude; // Geopotential height above sea level integrated from pressure, temperature and humidity
+    int hhh; // Geopotential height above sea level derived from GPS receiver mounted on radiosonde
+    int hgeom1; //
+    int hgeom2; //
+    double PPPP; // air pressure (measured in hPa, hectoPascal)
+    double TTT; // air temperatute measured in Celsius
+    double RH; // relative Humidity
+    int dd; // wind direction in degrees
+    double ff; // wind speed
+    double abstand;
+};
 
 #include "merge_sort.h"
 
@@ -41,28 +41,28 @@ void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2);
 int main() {
     // gets time at start
     clock_t begin = clock();
-    printf("Please choose user\n1 - ivaylo\n2 - simeon\n3 - matviy\n");
+    printf("Please choose user\n1 - ivaylo\n2 - simeon\n3 - matviy\n4- marvin\n");
     char choice;
     char *fileNameString;
     char *writeFile;
     scanf("%c", &choice);
-    switch (choice){
-      case '1': // ivaylo
-          fileNameString = "D:\\FH-SWF\\1. Semester\\Grundlagen der Informatik\\Programming Projekt\\GDI-PROJEKT\\DataToRead_without_missing_info.txt";
-          writeFile = "D:\\FH-SWF\\1. Semester\\Grundlagen der Informatik\\Programming Projekt\\GDI-PROJEKT\\WriteData.txt";
-          break;
-      case '2': // simeon
-          fileNameString = "/home/simeon/Desktop/GDI-PROJEKT/DataToRead.tab";
-          writeFile = "/home/simeon/Desktop/GDI-PROJEKT/WriteData.txt";
-          break;
-      case '3': // matviy
-          fileNameString = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\DataToRead.tab";
-          writeFile = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\WriteData.txt";
-          break;
-      case '4': // Marvin
-          fileNameString = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\DataToRead.tab";
-          writeFile = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\WriteData.txt";
-          break;
+    switch (choice) {
+        case '1': // ivaylo
+            fileNameString = "D:\\FH-SWF\\1. Semester\\Grundlagen der Informatik\\Programming Projekt\\GDI-PROJEKT\\DataToRead_without_missing_info.txt";
+            writeFile = "D:\\FH-SWF\\1. Semester\\Grundlagen der Informatik\\Programming Projekt\\GDI-PROJEKT\\WriteData.txt";
+            break;
+        case '2': // simeon
+            fileNameString = "/home/simeon/Desktop/GDI-PROJEKT/DataToRead.tab";
+            writeFile = "/home/simeon/Desktop/GDI-PROJEKT/WriteData.txt";
+            break;
+        case '3': // matviy
+            fileNameString = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\DataToRead.tab";
+            writeFile = "C:\\Users\\matvi\\Documents\\GitHub\\GDI-PROJEKT\\WriteData.txt";
+            break;
+        case '4': // Marvin
+            fileNameString = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\DataToRead.tab";
+            writeFile = "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\WriteData.txt";
+            break;
     }
 
     FILE *fileToRead = fopen(fileNameString, "r");
@@ -76,7 +76,7 @@ int main() {
     FILE *fileToWrite;
     fileToWrite = fopen(writeFile, "w");
 
-    struct datapoint *dp = (struct datapoint *) malloc (POINTS * sizeof(struct datapoint));
+    struct datapoint *dp = (struct datapoint *) malloc(POINTS * sizeof(struct datapoint));
 
     int fail = 0;
     int success;
@@ -84,7 +84,7 @@ int main() {
     int i = 0;
     // reads the chosen amount of data points and deletes any points with missing values
     //for (i = 0; i < POINTS; i++) {
-    while(!feof(fileToRead)) {
+    while (!feof(fileToRead)) {
         success = fscanf(fileToRead, "%s\t%s\t%lf\t%lf\t%d\t%d\t%d\t%d\t%lf\t%lf\t%lf\t%d\t%lf\n", dp[i].event,
                          dp[i].datetime, &dp[i].latitude, &dp[i].longitude, &dp[i].altitude, &dp[i].hhh,
                          &dp[i].hgeom1,
@@ -98,10 +98,10 @@ int main() {
         ++i;
     }
 
-    Merge_sort(dp, 0, 100, '2');
+    Merge_sort(dp, 0, i, '1');
 
     // puts all of the read data in a new file with the number of the point in front of the values
-    for (int l = 0; l < 100; l++) {
+    for (int l = 0; l < i; l++) {
         fprintf(fileToWrite, "%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n",
                 dp[l].event,
                 dp[l].datetime, dp[l].latitude, dp[l].longitude,

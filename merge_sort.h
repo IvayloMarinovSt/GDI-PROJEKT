@@ -9,7 +9,7 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
     int lenghtLeft = middle - begin + 1;
     int lenghtRight = end - middle;
     struct datapoint *leftField = (struct datapoint *) malloc((lenghtLeft + 2) * sizeof(struct datapoint));
-    struct datapoint *rightField = (struct datapoint *) malloc ((lenghtRight + 2) * sizeof(struct datapoint));
+    struct datapoint *rightField = (struct datapoint *) malloc((lenghtRight + 2) * sizeof(struct datapoint));
 
     for (int i = 1; i <= lenghtLeft + 1; i++) {
         leftField[i] = unsortedField[begin + i - 1];
@@ -22,6 +22,7 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
     int j = 1;
     // printf("TEST MERGE\n");
     switch (choice) {
+        // Sort according to the latitude of the point
         case '1':
             leftField[lenghtLeft + 1].latitude = INT_MAX;
             rightField[lenghtRight + 1].latitude = INT_MAX;
@@ -39,7 +40,7 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
             free(rightField);
             break;
 
-
+            //Sort according to longitude of the point
         case '2':
             leftField[lenghtLeft + 1].longitude = INT_MAX;
             rightField[lenghtRight + 1].longitude = INT_MAX;
@@ -56,7 +57,7 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
             free(rightField);
             break;
 
-
+            // sort according to distance(abstand)
         case '3':
             leftField[lenghtLeft + 1].abstand = INT_MAX;
             rightField[lenghtRight + 1].abstand = INT_MAX;
@@ -73,7 +74,7 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
             free(rightField);
             break;
 
-
+            // sort according to temperature (TTT)
         case '4':
             leftField[lenghtLeft + 1].TTT = INT_MAX;
             rightField[lenghtRight + 1].TTT = INT_MAX;
