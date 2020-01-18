@@ -34,7 +34,7 @@ struct datapoint {
     double abstand; /// distance
 };
 
-#include "merge_sort.h"
+#include "C:\\Users\\Rem\\Desktop\\FH SWF\\GdI\\1. Semester\\GDI-PROJEKT\\merge_sort.h"
 
 void xyz_calc(struct datapoint *dp);
 
@@ -90,7 +90,7 @@ int main() {
     int success;
     int prev = 0;
     int i = 0;
-
+    int fail=0;
     while (!feof(fileToRead)) {
         //reads data from the file until the end of the file is reached
 
@@ -105,9 +105,11 @@ int main() {
          * unsuccessful, 'i' will be decremented and thus 'dp[i]' will be overwritten with the values of
          * the next read, that is successful. This done by the next two conditions.
          */
-        if (success != 13 || prev != 0) {
+         if(success!=13) fail=1;
+        if (success != 13 || prev != 0 || fail!=0) {
             i--;
-            prev = 1;
+            fail=0;
+            prev = fail;
         }
         // at the end of the while loop 'i' will have counted the amount of data points that were read from the file
         ++i;
