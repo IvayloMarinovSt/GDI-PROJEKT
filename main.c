@@ -48,7 +48,7 @@ void Polar_coordinates(struct datapoint *dp);
 int main() {
     // gets time at start
     clock_t begin = clock();
-    printf("Please choose user\n1 - ivaylo\n2 - simeon\n3 - matviy\n4- marvin\n");
+    printf("Please choose user\n1 - ivaylo\n2 - simeon\n3 - matviy\n4 - marvin\n");
     char chooseUser;
     char *fileNameString;
     char *writeFile;
