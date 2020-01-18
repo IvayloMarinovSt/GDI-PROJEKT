@@ -4,7 +4,19 @@
 #include <limits.h>
 #include <stdlib.h>
 
-
+/**
+ * Merge - splits the given unsorted array in two and then merges both smaller arrays into one
+ *         whilst sorting them
+ * @param unsortedField - the unsorted field
+ * @param begin - the position where the sorting begins i.e. choosing 5 will begin from position unsortedArray[5]
+ * @param middle - middle point of the unsorted array that is to be sorted
+ * @param end - the position where the sorting ends i.e. choosing 10 will end the algorithm at position unsortedArray[10]
+ * @param choice - choice for the sorting algorithm
+ *              1- sort according to latitude
+ *              2- sort according to longitude
+ *              3- sort according to abstand
+ *              4- sort according to TTTs
+ */
 void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char choice) {
     int lenghtLeft = middle - begin + 1;
     int lenghtRight = end - middle;
@@ -20,7 +32,6 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
 
     int i = 1;
     int j = 1;
-    // printf("TEST MERGE\n");
     switch (choice) {
         // Sort according to the latitude of the point
         case '1':
@@ -36,8 +47,6 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
                     j++;
                 }
             }
-            free(leftField);
-            free(rightField);
             break;
 
             //Sort according to longitude of the point
@@ -53,8 +62,6 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
                     j++;
                 }
             }
-            free(leftField);
-            free(rightField);
             break;
 
             // sort according to distance(abstand)
@@ -70,8 +77,6 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
                     j++;
                 }
             }
-            free(leftField);
-            free(rightField);
             break;
 
             // sort according to temperature (TTT)
@@ -87,33 +92,34 @@ void Merge(struct datapoint *unsortedField, int begin, int middle, int end, char
                     j++;
                 }
             }
-            free(leftField);
-            free(rightField);
             break;
     }
+    free(leftField);
+    free(rightField);
 }
 
-/* Merge sort function
- * unsortedArray- the unsorted array that has to be sorted
- * begin - the position where the sorting begins i.e. choosing 5 will begin from position array[5]
- * end - the position where the sorting ends i.e. choosing 10 will end the algorithm at position array[10]
- * choice- choice for the sorting algorithm
- *          1- sort according to latitude
- *          2- sort according to longitude
- *          3- sort according to abstand
- *          4- sort according to TTT
+
+/**
+ * Merge_sort - sort the data points according to a chosen parameter, possible choices listed under choice parameter
+ * @param unsortedArray - the unsorted array that has to be sorted
+ * @param begin - the position where the sorting begins i.e. choosing 5 will begin from position unsortedArray[5]
+ * @param end - the position where the sorting ends i.e. choosing 10 will end the algorithm at position unsortedArray[10]
+ * @param choice - choice for the sorting algorithm
+ *              1- sort according to latitude
+ *              2- sort according to longitude
+ *              3- sort according to abstand
+ *              4- sort according to TTT
  */
 void Merge_sort(struct datapoint *unsortedArray, int begin, int end, char choice) {
     int middle;
     if (begin < end) {
-        // calculation of the middle position, so that the array can be split in two
         middle = (begin + end) / 2;
-        // printf("TEST MERGE SORT\n");
-        // splitting the array in two and sorting the two smaller arrays (recursively)
+        /// calculation of the middle position, so that the array can be split in two
         Merge_sort(unsortedArray, begin, middle, choice);
         Merge_sort(unsortedArray, middle + 1, end, choice);
-        // merging the both already sorted arrays
+        /// splitting the array in two and sorting the two smaller arrays (recursively)
         Merge(unsortedArray, begin, middle, end, choice);
+        /// merging the both already sorted arrays
     }
 }
 
