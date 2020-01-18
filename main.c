@@ -43,7 +43,9 @@ void euclidean_dist(struct datapoint *dp1, struct datapoint *dp2);
 void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2);
 
 void Polar_coordinates(struct datapoint *dp);
-void Box(double upper_lat, double lower_lat, double upper_long, double lower_long, struct datapoint *dp, int pointsAmount);
+
+void
+Box(double upper_lat, double lower_lat, double upper_long, double lower_long, struct datapoint *dp, int pointsAmount);
 
 /*****************************************************MAIN***********************************************************/
 int main() {
@@ -91,7 +93,7 @@ int main() {
     int success;
     int prev = 0;
     int i = 0;
-
+    int fail = 0;
     while (!feof(fileToRead)) {
         //reads data from the file until the end of the file is reached
 
@@ -106,9 +108,11 @@ int main() {
          * unsuccessful, 'i' will be decremented and thus 'dp[i]' will be overwritten with the values of
          * the next read, that is successful. This done by the next two conditions.
          */
-        if (success != 13 || prev != 0) {
+        if (success != 13) fail = 1;
+        if (success != 13 || fail != 0 || prev != 0) {
+            prev = fail;
+            fail = 0;
             i--;
-            prev = 1;
         }
         // at the end of the while loop 'i' will have counted the amount of data points that were read from the file
         ++i;
@@ -154,21 +158,24 @@ int main() {
  * @param dp - pointer of all the data points. Only the ones in the box are printed
  * @param pointsAmount - the amount of points in the dp parameter
  */
-void Box(double upper_lat, double lower_lat, double upper_long, double lower_long, struct datapoint *dp, int pointsAmount){
+void
+Box(double upper_lat, double lower_lat, double upper_long, double lower_long, struct datapoint *dp, int pointsAmount) {
     int counter;
-    for(int i=0; i < pointsAmount; ++i){
-        if(dp[i].latitude < upper_lat && dp[i].latitude > lower_lat && dp[i].longitude < upper_long && dp[i].longitude > lower_long){
-                        printf("%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n",
-                                    dp[i].event,
-                                    dp[i].datetime, dp[i].latitude, dp[i].longitude,
-                                    dp[i].altitude, dp[i].hhh, dp[i].hgeom1, dp[i].hgeom2, dp[i].PPPP, dp[i].TTT, dp[i].RH, dp[i].dd,
-                                    dp[i].ff);
-                        ++counter;
-                        // counts the amount of points in the "box"
-                    }
+    for (int i = 0; i < pointsAmount; ++i) {
+        if (dp[i].latitude < upper_lat && dp[i].latitude > lower_lat && dp[i].longitude < upper_long &&
+            dp[i].longitude > lower_long) {
+            printf("%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n",
+                   dp[i].event,
+                   dp[i].datetime, dp[i].latitude, dp[i].longitude,
+                   dp[i].altitude, dp[i].hhh, dp[i].hgeom1, dp[i].hgeom2, dp[i].PPPP, dp[i].TTT, dp[i].RH, dp[i].dd,
+                   dp[i].ff);
+            ++counter;
+            // counts the amount of points in the "box"
+        }
     }
     printf("Points in the chosen box: %d", counter);
 }
+
 void Polar_coordinates(struct datapoint *dp) {
     double betaRad, alfaRad;
     double radius = sqrt(pow(dp->x, 2) + pow(dp->y, 2) + pow(dp->z, 2));
