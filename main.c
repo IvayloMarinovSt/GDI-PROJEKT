@@ -43,6 +43,7 @@ void euclidean_dist(struct datapoint *dp1, struct datapoint *dp2);
 void orthodromic_dist(struct datapoint *dp1, struct datapoint *dp2);
 
 void Polar_coordinates(struct datapoint *dp);
+void Box(double upper_lat, double lower_lat, double upper_long, double lower_long, struct datapoint *dp, int pointsAmount);
 
 /*****************************************************MAIN***********************************************************/
 int main() {
@@ -117,6 +118,8 @@ int main() {
     clock_t end_sort = clock();
     printf("\nSorting time: %lf sec\n", (double) (end_sort - start_sort) / CLOCKS_PER_SEC);
 
+    Box((double) 72, (double) 71, (double) 15, (double) 14, dp, i);
+
     // puts all of the read data in a new file with the number of the point in front of the values
     for (int l = 0; l < i; l++) {
         fprintf(fileToWrite, "%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n",
@@ -142,7 +145,30 @@ int main() {
 }
 
 /***************************************************END OF MAIN******************************************************/
-
+/**
+ * Box - prints all the points that are in the limits chosen from the user
+ * @param upper_lat - upper limit for latitude chosen from user
+ * @param lower_lat - lower limit for latitude chosen from user
+ * @param upper_long - upper limit for longitude chosen from user
+ * @param lower_long - lower limit for longitude chosen from user
+ * @param dp - pointer of all the data points. Only the ones in the box are printed
+ * @param pointsAmount - the amount of points in the dp parameter
+ */
+void Box(double upper_lat, double lower_lat, double upper_long, double lower_long, struct datapoint *dp, int pointsAmount){
+    int counter;
+    for(int i=0; i < pointsAmount; ++i){
+        if(dp[i].latitude < upper_lat && dp[i].latitude > lower_lat && dp[i].longitude < upper_long && dp[i].longitude > lower_long){
+                        printf("%s\t%s\t%.5lf\t%.5lf\t%d\t%d\t%d\t%d\t%.2lf\t%.2lf\t%.1lf\t%d\t%.1lf\n",
+                                    dp[i].event,
+                                    dp[i].datetime, dp[i].latitude, dp[i].longitude,
+                                    dp[i].altitude, dp[i].hhh, dp[i].hgeom1, dp[i].hgeom2, dp[i].PPPP, dp[i].TTT, dp[i].RH, dp[i].dd,
+                                    dp[i].ff);
+                        ++counter;
+                        // counts the amount of points in the "box"
+                    }
+    }
+    printf("Points in the chosen box: %d", counter);
+}
 void Polar_coordinates(struct datapoint *dp) {
     double betaRad, alfaRad;
     double radius = sqrt(pow(dp->x, 2) + pow(dp->y, 2) + pow(dp->z, 2));
